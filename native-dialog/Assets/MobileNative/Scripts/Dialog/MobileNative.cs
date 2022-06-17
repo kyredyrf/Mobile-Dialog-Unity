@@ -91,6 +91,20 @@ namespace pingak9
             javaUnityClass.CallStatic("ShowDatePicker", year, month, day);
 #endif
         }
+
+        public static void showDatePicker(int year, int month, int day, int firstDayOfWeek, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, bool calendarViewShown, bool spinnerShown)
+        {
+#if UNITY_EDITOR
+#elif UNITY_IPHONE
+            DateTime dateTime = new DateTime(year, month, day);
+            double unix = (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds; 
+            _TAG_ShowDatePicker(2, unix);
+#elif UNITY_ANDROID
+            AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
+            javaUnityClass.CallStatic("ShowDatePicker", year, month, day, firstDayOfWeek, minYear, minMonth, minDay, maxYear, maxMonth, maxDay, calendarViewShown, spinnerShown);
+#endif
+        }
+
         public static void showTimePicker()
         {
 #if UNITY_EDITOR

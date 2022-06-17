@@ -26,7 +26,15 @@ namespace pingak9
             dialog.OnDateChanged = onChange;
             dialog.OnPickerClosed = onClose;
 
-            MobileNative.showDatePicker(year, month, day);
+            var now = DateTimeOffset.Now;
+            var min = now.Subtract(TimeSpan.FromDays(30));
+            var max = now;
+            MobileNative.showDatePicker(
+                year, month, day, firstDayOfWeek: 2,
+                min.Year, min.Month, min.Day,
+                max.Year, max.Month, max.Day,
+                calendarViewShown: false,
+                spinnerShown: false);
             return dialog;
         }
 
