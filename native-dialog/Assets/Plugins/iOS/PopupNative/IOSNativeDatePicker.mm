@@ -62,7 +62,15 @@
 
 UIDatePicker *datePicker;
 
-+ (void) DP_show:(int)mode secondNumber:(double)unix{
++ (void) DP_showTimePicker:(double)firstUnixTime {
+    [self DP_show:1 firstUnixTime:firstUnixTime minimumUnixTime:0 maximumUnixTime:0];
+}
+
++ (void) DP_showDatePicker:(double)firstUnixTime minimumUnixTime:(double)minimumUnixTime maximumUnixTime:(double)maximumUnixTime {
+    [self DP_show:2 firstUnixTime:firstUnixTime minimumUnixTime:minimumUnixTime maximumUnixTime:maximumUnixTime];
+}
+
++ (void) DP_show:(int)mode firstUnixTime:(double)firstUnixTime minimumUnixTime:(double)minimumUnixTime maximumUnixTime:(double)maximumUnixTime {
     UIViewController *vc =  UnityGetGLViewController();
     
     
@@ -115,10 +123,16 @@ UIDatePicker *datePicker;
             
         case 2:
             datePicker.datePickerMode = UIDatePickerModeDate;
-             if (@available(iOS 13.4, *)) {
+            if (@available(iOS 13.4, *)) {
                 datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
             }
-            NSDate *dateTraded = [NSDate dateWithTimeIntervalSince1970 :unix];
+            if (minimumUnixTime != 0.0) {
+                datePicker.minimumDate = [NSDate dateWithTimeIntervalSince1970 :minimumUnixTime];
+            }
+            if (maximumUnixTime != 0.0) {
+                datePicker.maximumDate = [NSDate dateWithTimeIntervalSince1970 :maximumUnixTime];
+            }
+            NSDate *dateTraded = [NSDate dateWithTimeIntervalSince1970 :firstUnixTime];
             [datePicker setDate:dateTraded];
             break;
             
@@ -186,8 +200,16 @@ extern "C" {
     //  Unity Call Date Time Picker
     //--------------------------------------
     
-    void _TAG_ShowDatePicker(int mode, double unix) {
-        [IOSNativeDatePicker DP_show:mode secondNumber:unix];
+    void _TAG_ShowTimePicker(double unix) {
+        [IOSNativeDatePicker DP_showTimePicker:unix];
+    }
+    
+    void _TAG_ShowDatePicker(double unix) {
+        [IOSNativeDatePicker DP_showDatePicker:unix minimumUnixTime:0 maximumUnixTime:0];
+    }
+
+    void _TAG_ShowDatePickerWithRange(double firstUnixTime, double minimumUnixTime, double maximumUnixTime) {
+        [IOSNativeDatePicker DP_showDatePicker:firstUnixTime minimumUnixTime:minimumUnixTime maximumUnixTime:maximumUnixTime];
     }
 }
 

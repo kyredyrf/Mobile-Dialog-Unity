@@ -23,7 +23,13 @@ namespace pingak9
         private static extern void _TAG_DismissCurrentAlert();
 	
         [DllImport ("__Internal")]
-        private static extern void _TAG_ShowDatePicker(int mode, double unix);
+        private static extern void _TAG_ShowTimePicker(double unix);
+	
+        [DllImport ("__Internal")]
+        private static extern void _TAG_ShowDatePicker(double unix);
+	
+        [DllImport ("__Internal")]
+        private static extern void _TAG_ShowDatePickerWithRange(double firstUnixTime, double minimumUnixTime, double maximumUnixTime);
 
 #endif
 
@@ -85,7 +91,7 @@ namespace pingak9
 #elif UNITY_IPHONE
             DateTime dateTime = new DateTime(year, month, day);
             double unix = (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds; 
-            _TAG_ShowDatePicker(2, unix);
+            _TAG_ShowDatePicker(unix);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowDatePicker", year, month, day);
@@ -96,9 +102,14 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            DateTime dateTime = new DateTime(year, month, day);
-            double unix = (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds; 
-            _TAG_ShowDatePicker(2, unix);
+            var firstDateTime = new DateTime(year, month, day);
+            var minDateTime = new DateTime(minYear, minMonth, minDay);
+            var maxDateTime = new DateTime(maxYear, maxMonth, maxDay);
+            var baseTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            var firstUnixTime = (TimeZoneInfo.ConvertTimeToUtc(firstDateTime) - baseTime).TotalSeconds; 
+            var minUnixTime = (TimeZoneInfo.ConvertTimeToUtc(minDateTime) - baseTime).TotalSeconds; 
+            var maxUnixTime = (TimeZoneInfo.ConvertTimeToUtc(maxDateTime) - baseTime).TotalSeconds; 
+            _TAG_ShowDatePickerWithRange(firstUnixTime, minUnixTime, maxUnixTime);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowDatePicker", year, month, day, firstDayOfWeek, minYear, minMonth, minDay, maxYear, maxMonth, maxDay, calendarViewShown, spinnerShown);
@@ -109,7 +120,7 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            _TAG_ShowDatePicker(1, 0);
+            _TAG_ShowTimePicker(0);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowTimePicker");
