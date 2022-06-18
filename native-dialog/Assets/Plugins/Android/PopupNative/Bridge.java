@@ -18,7 +18,6 @@ import java.util.Date;
  * Created by PingAK9
  */
 public class Bridge {
-
     static AlertDialog alertDialog;
     public static void ShowDialogNeutral(String gameObjectName, String title, String message, String accept, String neutral, String decline) {
         DismissCurrentAlert();
@@ -101,6 +100,7 @@ public class Bridge {
         if (alertDialog != null)
             alertDialog.hide();
     }
+
     public static void ShowDatePicker(String gameObjectName, int year, int month, int day) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(UnityPlayer.currentActivity,
                 new DatePickerDialog.OnDateSetListener() {
@@ -116,7 +116,19 @@ public class Bridge {
         datePickerDialog.show();
     }
 
-    public static void ShowDatePicker(String gameObjectName, int year, int month, int day, int firstDayOfWeek, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, boolean calendarViewShown, boolean spinnerShown) {
+    public static void ShowDatePicker(String gameObjectName, int year, int month, int day, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay) {
+        ShowDatePickerInternal(gameObjectName, year, month, day, minYear, minMonth, minDay, maxYear, maxMonth, maxDay, null);
+    }
+
+    public static void ShowDatePicker(String gameObjectName, int year, int month, int day, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, int firstDayOfWeek, boolean calendarViewShown, boolean spinnerShown) {
+        ShowDatePickerOption option = new ShowDatePickerOption();
+        option.firstDayOfWeek = firstDayOfWeek;
+        option.calendarViewShown = calendarViewShown;
+        option.spinnerShown = spinnerShown;
+        ShowDatePickerInternal(gameObjectName, year, month, day, minYear, minMonth, minDay, maxYear, maxMonth, maxDay, option);
+    }
+
+    static void ShowDatePickerInternal(String gameObjectName, int year, int month, int day, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, ShowDatePickerOption option) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(UnityPlayer.currentActivity,
             new DatePickerDialog.OnDateSetListener() {
                 @Override
@@ -152,11 +164,14 @@ public class Bridge {
         maxCalendar.set(Calendar.SECOND, maxCalendar.getMaximum(Calendar.SECOND));
         maxCalendar.set(Calendar.MILLISECOND, maxCalendar.getMaximum(Calendar.MILLISECOND));
 
-        datePicker.setFirstDayOfWeek(firstDayOfWeek);
         datePicker.setMinDate(minCalendar.getTimeInMillis());
         datePicker.setMaxDate(maxCalendar.getTimeInMillis());
-        datePicker.setCalendarViewShown(calendarViewShown);
-        datePicker.setSpinnersShown(spinnerShown);
+
+        if (option != null) {
+            datePicker.setFirstDayOfWeek(option.firstDayOfWeek);
+            datePicker.setCalendarViewShown(option.calendarViewShown);
+            datePicker.setSpinnersShown(option.spinnerShown);
+        }
 
         datePickerDialog.show();
     }
@@ -180,4 +195,10 @@ public class Bridge {
         timePickerDialog.show();
 
     }
+}
+
+class ShowDatePickerOption {
+    public int firstDayOfWeek;
+    public boolean calendarViewShown;
+    public boolean spinnerShown;
 }

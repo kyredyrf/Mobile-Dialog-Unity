@@ -20,13 +20,13 @@ namespace pingak9
         {
             MobileDialogNeutral.Create(title, message, accept, neutral, decline, acceptAction, neutralAction, declineAction);
         }
-        public static void OpenDatePicker(int year , int month, int day, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
+        public static void OpenDatePicker(DateTimeOffset firstDate, DateTimeOffset minDate, DateTimeOffset maxDate, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
-            MobileDateTimePicker.CreateDate(year, month, day, onChange, onClose);
+            MobileDateTimePicker.CreateDate(firstDate, minDate, maxDate, onChange, onClose);
         }
-        public static void OpenTimePicker(int hour, int minute, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
+        public static void OpenTimePicker(DateTimeOffset firstTime, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
-            MobileDateTimePicker.CreateTime(hour, minute, onChange, onClose);
+            MobileDateTimePicker.CreateTime(firstTime, onChange, onClose);
         }
     }
 }

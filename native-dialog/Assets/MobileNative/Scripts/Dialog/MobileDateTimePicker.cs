@@ -19,33 +19,25 @@ namespace pingak9
 
         #region PUBLIC_FUNCTIONS
 
-        public static MobileDateTimePicker CreateDate(int year, int month, int day, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
+        public static MobileDateTimePicker CreateDate(DateTimeOffset firstDate, DateTimeOffset minDate, DateTimeOffset maxDate, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
             var gameObjectName = "MobileDateTimePicker";
             var dialog = new GameObject(gameObjectName).AddComponent<MobileDateTimePicker>();
             dialog.OnDateChanged = onChange;
             dialog.OnPickerClosed = onClose;
 
-            var now = DateTimeOffset.Now;
-            var min = now.Subtract(TimeSpan.FromDays(30));
-            var max = now;
-            MobileNative.showDatePicker(
-                gameObjectName, year, month, day, firstDayOfWeek: 2,
-                min.Year, min.Month, min.Day,
-                max.Year, max.Month, max.Day,
-                calendarViewShown: false,
-                spinnerShown: false);
+            MobileNative.showDatePicker(gameObjectName, firstDate, minDate, maxDate);
             return dialog;
         }
 
-        public static MobileDateTimePicker CreateTime(int hour, int minute, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
+        public static MobileDateTimePicker CreateTime(DateTimeOffset firstTime, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
             var gameObjectName = "MobileDateTimePicker";
             var dialog = new GameObject(gameObjectName).AddComponent<MobileDateTimePicker>();
             dialog.OnDateChanged = onChange;
             dialog.OnPickerClosed = onClose;
 
-            MobileNative.showTimePicker(gameObjectName, hour, minute);
+            MobileNative.showTimePicker(gameObjectName, firstTime);
             return dialog;
         }
 
