@@ -13,13 +13,13 @@ namespace pingak9
 
     public class MobileDateTimePicker : MonoBehaviour
     {
-        public Action<DateTime> OnDateChanged;
-        public Action<DateTime> OnPickerClosed;
+        public Action<DateTimeOffset> OnDateChanged;
+        public Action<DateTimeOffset> OnPickerClosed;
 
 
         #region PUBLIC_FUNCTIONS
 
-        public static MobileDateTimePicker CreateDate(int year, int month, int day, Action<DateTime> onChange = null, Action<DateTime> onClose = null)
+        public static MobileDateTimePicker CreateDate(int year, int month, int day, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
             MobileDateTimePicker dialog;
             dialog = new GameObject("MobileDateTimePicker").AddComponent<MobileDateTimePicker>();
@@ -38,7 +38,7 @@ namespace pingak9
             return dialog;
         }
 
-        public static MobileDateTimePicker CreateTime(Action<DateTime> onChange = null, Action<DateTime> onClose = null)
+        public static MobileDateTimePicker CreateTime(Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
             MobileDateTimePicker dialog;
             dialog = new GameObject("MobileDateTimePicker").AddComponent<MobileDateTimePicker>();
@@ -57,23 +57,23 @@ namespace pingak9
         // Events
         //--------------------------------------
 
-        string formatDate = "yyyy-MM-dd HH:mm:ss";
+        // string formatDate = "yyyy-MM-dd HH:mm:ss";
         /// <summary>
         /// Note avalible in android
         /// </summary>
         /// <param name="time"></param>
         public void DateChangedEvent(string time)
         {
-            DateTime dt = DateTime.Parse(time);
-            //DateTime dt = DateTime.ParseExact(time, formatDate, CultureInfo.InvariantCulture);
+            DateTimeOffset dt = DateTimeOffset.Parse(time);
+            // DateTimeOffset dt = DateTimeOffset.ParseExact(time, formatDate, CultureInfo.InvariantCulture);
             if (OnDateChanged!= null)
                 OnDateChanged(dt);
         }
 
         public void PickerClosedEvent(string time)
         {
-            DateTime dt = DateTime.Parse(time);
-            //DateTime dt = DateTime.ParseExact(time, formatDate, CultureInfo.InvariantCulture);
+            DateTimeOffset dt = DateTimeOffset.Parse(time);
+            // DateTimeOffset dt = DateTimeOffset.ParseExact(time, formatDate, CultureInfo.InvariantCulture);
             if (OnPickerClosed != null)
                 OnPickerClosed(dt);
         }

@@ -56,11 +56,11 @@ public class PopupView : MonoBehaviour
         var now = DateTimeOffset.Now;
         NativeDialog.OpenDatePicker(
             now.Year, now.Month, now.Day,
-            (DateTime _date) =>
+            _date =>
             {
                 DebugLog(_date.ToString());
             },
-            (DateTime _date) =>
+            _date =>
             {
                 DebugLog(_date.ToString());
             });        
@@ -68,11 +68,11 @@ public class PopupView : MonoBehaviour
     public void OnTimePicker()
     {
         NativeDialog.OpenTimePicker(
-            (DateTime _date) =>
+            _date =>
             {
                 DebugLog(_date.ToString());
             },
-            (DateTime _date) =>
+            _date =>
             {
                 DebugLog(_date.ToString());
             });

@@ -117,16 +117,14 @@ public class Bridge {
 
     public static void ShowDatePicker(int year, int month, int day, int firstDayOfWeek, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, boolean calendarViewShown, boolean spinnerShown) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(UnityPlayer.currentActivity,
-                new DatePickerDialog.OnDateSetListener() {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-                        String s = String.format("%d-%d-%d %d:%d:%d", year, monthOfYear+1, dayOfMonth,0,0,0);
-                        UnityPlayer.UnitySendMessage("MobileDateTimePicker", "PickerClosedEvent", s);
-                    }
-                },
-                year, month - 1, day);
+            new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    String s = String.format("%d-%d-%d %d:%d:%d", year, monthOfYear+1, dayOfMonth,0,0,0);
+                    UnityPlayer.UnitySendMessage("MobileDateTimePicker", "PickerClosedEvent", s);
+                }
+            },
+            year, month - 1, day);
 
         Calendar minCalendar = Calendar.getInstance();
         minCalendar.set(minYear, minMonth - 1, minDay);
@@ -163,7 +161,7 @@ public class Bridge {
                         int yeah = c.get(Calendar.YEAR);
                         int day = c.get(Calendar.DAY_OF_MONTH);
                         int month = c.get(Calendar.MONTH);
-                        Calendar c = Calendar.getInstance();
+                        // Calendar c = Calendar.getInstance();
                         String s = String.format("%d-%d-%d %d:%d:%d",yeah,month +1,day, hourOfDay, minute, 0);
                         UnityPlayer.UnitySendMessage("MobileDateTimePicker", "PickerClosedEvent", s);
                     }

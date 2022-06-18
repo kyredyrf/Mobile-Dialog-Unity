@@ -89,8 +89,8 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            DateTime dateTime = new DateTime(year, month, day);
-            double unix = (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds; 
+            DateTimeOffset dateTime = new DateTimeOffset(year, month, day);
+            double unix = (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds; 
             _TAG_ShowDatePicker(unix);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
@@ -102,10 +102,10 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            var firstDateTime = new DateTime(year, month, day);
-            var minDateTime = new DateTime(minYear, minMonth, minDay);
-            var maxDateTime = new DateTime(maxYear, maxMonth, maxDay);
-            var baseTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            var firstDateTime = new DateTimeOffset(year, month, day);
+            var minDateTime = new DateTimeOffset(minYear, minMonth, minDay);
+            var maxDateTime = new DateTimeOffset(maxYear, maxMonth, maxDay);
+            var baseTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             var firstUnixTime = (TimeZoneInfo.ConvertTimeToUtc(firstDateTime) - baseTime).TotalSeconds; 
             var minUnixTime = (TimeZoneInfo.ConvertTimeToUtc(minDateTime) - baseTime).TotalSeconds; 
             var maxUnixTime = (TimeZoneInfo.ConvertTimeToUtc(maxDateTime) - baseTime).TotalSeconds; 
