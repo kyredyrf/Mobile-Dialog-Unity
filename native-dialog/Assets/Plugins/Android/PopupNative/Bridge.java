@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -126,6 +127,17 @@ public class Bridge {
             },
             year, month - 1, day);
 
+        DatePicker datePicker = datePickerDialog.getDatePicker();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    String s = String.format("%d-%d-%d %d:%d:%d", year, monthOfYear+1, dayOfMonth,0,0,0);
+                    UnityPlayer.UnitySendMessage("MobileDateTimePicker", "DateChangedEvent", s);
+                }
+            });
+        }
+
         Calendar minCalendar = Calendar.getInstance();
         minCalendar.set(minYear, minMonth - 1, minDay);
         minCalendar.set(Calendar.HOUR_OF_DAY, minCalendar.getMinimum(Calendar.HOUR_OF_DAY));
@@ -140,7 +152,6 @@ public class Bridge {
         maxCalendar.set(Calendar.SECOND, maxCalendar.getMaximum(Calendar.SECOND));
         maxCalendar.set(Calendar.MILLISECOND, maxCalendar.getMaximum(Calendar.MILLISECOND));
 
-        DatePicker datePicker = datePickerDialog.getDatePicker();
         datePicker.setFirstDayOfWeek(firstDayOfWeek);
         datePicker.setMinDate(minCalendar.getTimeInMillis());
         datePicker.setMaxDate(maxCalendar.getTimeInMillis());
