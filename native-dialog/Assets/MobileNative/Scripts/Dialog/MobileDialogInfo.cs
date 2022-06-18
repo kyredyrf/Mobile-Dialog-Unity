@@ -20,20 +20,20 @@ namespace pingak9
 
         public static MobileDialogInfo Create(string title, string message, string ok, Action okAction)
         {
-            MobileDialogInfo dialog;
-            dialog = new GameObject("MobileDialogInfo").AddComponent<MobileDialogInfo>();
+            var gameObjectName = "MobileDialogInfo";
+            var dialog = new GameObject(gameObjectName).AddComponent<MobileDialogInfo>();
             dialog.title = title;
             dialog.message = message;
             dialog.ok = ok;
             dialog.okAction = okAction;
 
-            dialog.init();
+            dialog.init(gameObjectName);
             return dialog;
         }
 
-        public void init()
+        public void init(string gameObjectName)
         {
-            MobileNative.showInfoPopup(title, message, ok);
+            MobileNative.showInfoPopup(gameObjectName, title, message, ok);
         }
 
         #endregion

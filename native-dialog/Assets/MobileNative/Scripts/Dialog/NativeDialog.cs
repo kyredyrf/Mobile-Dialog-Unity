@@ -24,9 +24,9 @@ namespace pingak9
         {
             MobileDateTimePicker.CreateDate(year, month, day, onChange, onClose);
         }
-        public static void OpenTimePicker(Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
+        public static void OpenTimePicker(int hour, int minute, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
-            MobileDateTimePicker.CreateTime(onChange, onClose);
+            MobileDateTimePicker.CreateTime(hour, minute, onChange, onClose);
         }
     }
 }

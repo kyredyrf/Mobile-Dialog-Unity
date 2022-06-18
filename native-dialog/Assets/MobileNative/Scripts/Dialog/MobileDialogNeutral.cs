@@ -23,7 +23,8 @@ namespace pingak9
 
         public static MobileDialogNeutral Create(string title, string message, string accept, string neutral, string decline, Action acceptAction, Action neutralAction, Action declineAction)
         {
-            MobileDialogNeutral dialog = new GameObject("MobileDialogNeutral").AddComponent<MobileDialogNeutral>();
+            var gameObjectName = "MobileDialogNeutral";
+            var dialog = new GameObject(gameObjectName).AddComponent<MobileDialogNeutral>();
             dialog.title = title;
             dialog.message = message;
             dialog.accept = accept;
@@ -33,13 +34,13 @@ namespace pingak9
             dialog.neutralAction = neutralAction;
             dialog.declineAction = declineAction;
 
-            dialog.init();
+            dialog.init(gameObjectName);
             return dialog;
         }
 
-        public void init()
+        public void init(string gameObjectName)
         {
-            MobileNative.showDialogNeutral(title, message, accept, neutral, decline);
+            MobileNative.showDialogNeutral(gameObjectName, title, message, accept, neutral, decline);
         }
 
         #endregion

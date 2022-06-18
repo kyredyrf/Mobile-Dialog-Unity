@@ -21,8 +21,8 @@ namespace pingak9
 
         public static MobileDateTimePicker CreateDate(int year, int month, int day, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
-            MobileDateTimePicker dialog;
-            dialog = new GameObject("MobileDateTimePicker").AddComponent<MobileDateTimePicker>();
+            var gameObjectName = "MobileDateTimePicker";
+            var dialog = new GameObject(gameObjectName).AddComponent<MobileDateTimePicker>();
             dialog.OnDateChanged = onChange;
             dialog.OnPickerClosed = onClose;
 
@@ -30,7 +30,7 @@ namespace pingak9
             var min = now.Subtract(TimeSpan.FromDays(30));
             var max = now;
             MobileNative.showDatePicker(
-                year, month, day, firstDayOfWeek: 2,
+                gameObjectName, year, month, day, firstDayOfWeek: 2,
                 min.Year, min.Month, min.Day,
                 max.Year, max.Month, max.Day,
                 calendarViewShown: false,
@@ -38,14 +38,14 @@ namespace pingak9
             return dialog;
         }
 
-        public static MobileDateTimePicker CreateTime(Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
+        public static MobileDateTimePicker CreateTime(int hour, int minute, Action<DateTimeOffset> onChange = null, Action<DateTimeOffset> onClose = null)
         {
-            MobileDateTimePicker dialog;
-            dialog = new GameObject("MobileDateTimePicker").AddComponent<MobileDateTimePicker>();
+            var gameObjectName = "MobileDateTimePicker";
+            var dialog = new GameObject(gameObjectName).AddComponent<MobileDateTimePicker>();
             dialog.OnDateChanged = onChange;
             dialog.OnPickerClosed = onClose;
 
-            MobileNative.showTimePicker();
+            MobileNative.showTimePicker(gameObjectName, hour, minute);
             return dialog;
         }
 

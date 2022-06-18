@@ -33,14 +33,14 @@ namespace pingak9
 
 #endif
 
-        public static void showDialogNeutral(string title, string message, string accept, string neutral, string decline)
+        public static void showDialogNeutral(string gameObjectName, string title, string message, string accept, string neutral, string decline)
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
             _TAG_ShowDialogNeutral(title, message, accept, neutral, decline);
 #elif UNITY_ANDROID            
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
-            javaUnityClass.CallStatic("ShowDialogNeutral", title, message, accept, neutral, decline);
+            javaUnityClass.CallStatic("ShowDialogNeutral", gameObjectName, title, message, accept, neutral, decline);
 #endif
         }
 
@@ -52,25 +52,25 @@ namespace pingak9
         /// <param name="yes">Accept Button text</param>
         /// <param name="no">Cancel Button text</param>
         /// <param name="cancelable">Android only. Allows setting the cancelable property of the dialog</param>
-        public static void showDialogConfirm(string title, string message, string yes, string no, bool cancelable = true)
+        public static void showDialogConfirm(string gameObjectName, string title, string message, string yes, string no, bool cancelable = true)
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
             _TAG_ShowDialogConfirm(title, message, yes, no);
 #elif UNITY_ANDROID            
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
-            javaUnityClass.CallStatic("ShowDialogConfirm", title, message, yes, no, cancelable);
+            javaUnityClass.CallStatic("ShowDialogConfirm", gameObjectName, title, message, yes, no, cancelable);
 #endif
         }
 
-        public static void showInfoPopup(string title, string message, string ok)
+        public static void showInfoPopup(string gameObjectName, string title, string message, string ok)
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
             _TAG_ShowDialogInfo(title, message, ok);
 #elif UNITY_ANDROID            
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
-            javaUnityClass.CallStatic("ShowDialogInfo", title, message, ok);
+            javaUnityClass.CallStatic("ShowDialogInfo", gameObjectName, title, message, ok);
 #endif
         }
 
@@ -85,7 +85,7 @@ namespace pingak9
 #endif
         }
 
-        public static void showDatePicker(int year, int month, int day)
+        public static void showDatePicker(string gameObjectName, int year, int month, int day)
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
@@ -94,11 +94,11 @@ namespace pingak9
             _TAG_ShowDatePicker(unix);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
-            javaUnityClass.CallStatic("ShowDatePicker", year, month, day);
+            javaUnityClass.CallStatic("ShowDatePicker", gameObjectName, year, month, day);
 #endif
         }
 
-        public static void showDatePicker(int year, int month, int day, int firstDayOfWeek, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, bool calendarViewShown, bool spinnerShown)
+        public static void showDatePicker(string gameObjectName, int year, int month, int day, int firstDayOfWeek, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, bool calendarViewShown, bool spinnerShown)
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
@@ -112,18 +112,18 @@ namespace pingak9
             _TAG_ShowDatePickerWithRange(firstUnixTime, minUnixTime, maxUnixTime);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
-            javaUnityClass.CallStatic("ShowDatePicker", year, month, day, firstDayOfWeek, minYear, minMonth, minDay, maxYear, maxMonth, maxDay, calendarViewShown, spinnerShown);
+            javaUnityClass.CallStatic("ShowDatePicker", gameObjectName, year, month, day, firstDayOfWeek, minYear, minMonth, minDay, maxYear, maxMonth, maxDay, calendarViewShown, spinnerShown);
 #endif
         }
 
-        public static void showTimePicker()
+        public static void showTimePicker(string gameObjectName, int hour, int minute)
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
             _TAG_ShowTimePicker(0);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
-            javaUnityClass.CallStatic("ShowTimePicker");
+            javaUnityClass.CallStatic("ShowTimePicker", gameObjectName, hour, minute);
 #endif
         }
     }

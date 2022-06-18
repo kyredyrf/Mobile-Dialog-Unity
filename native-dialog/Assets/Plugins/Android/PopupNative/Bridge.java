@@ -20,7 +20,7 @@ import java.util.Date;
 public class Bridge {
 
     static AlertDialog alertDialog;
-    public static void ShowDialogNeutral(String title, String message, String accept, String neutral, String decline) {
+    public static void ShowDialogNeutral(String gameObjectName, String title, String message, String accept, String neutral, String decline) {
         DismissCurrentAlert();
         alertDialog = new AlertDialog.Builder(UnityPlayer.currentActivity).create(); //Read Update
         alertDialog.setTitle(title);
@@ -28,60 +28,60 @@ public class Bridge {
 
         alertDialog.setButton(accept, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                UnityPlayer.UnitySendMessage("MobileDialogNeutral", "OnAcceptCallBack", "0");
+                UnityPlayer.UnitySendMessage(gameObjectName, "OnAcceptCallBack", "0");
             }
         });
         alertDialog.setButton2(neutral, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                UnityPlayer.UnitySendMessage("MobileDialogNeutral", "OnNeutralCallBack", "1");
+                UnityPlayer.UnitySendMessage(gameObjectName, "OnNeutralCallBack", "1");
             }
         });
         alertDialog.setButton3(decline, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                UnityPlayer.UnitySendMessage("MobileDialogNeutral", "OnDeclineCallBack", "2");
+                UnityPlayer.UnitySendMessage(gameObjectName, "OnDeclineCallBack", "2");
             }
         });
         alertDialog.show();
     }
 
-    private static AlertDialog CreateDialogConfirm(String title, String message, String yes, String no) {
+    private static AlertDialog CreateDialogConfirm(String gameObjectName, String title, String message, String yes, String no) {
         AlertDialog dialog = new AlertDialog.Builder(UnityPlayer.currentActivity).create(); //Read Update
         dialog.setTitle(title);
         dialog.setMessage(message);
 
         dialog.setButton(yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                UnityPlayer.UnitySendMessage("MobileDialogConfirm", "OnYesCallBack", "0");
+                UnityPlayer.UnitySendMessage(gameObjectName, "OnYesCallBack", "0");
             }
         });
         dialog.setButton2(no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                UnityPlayer.UnitySendMessage("MobileDialogConfirm", "OnNoCallBack", "1");
+                UnityPlayer.UnitySendMessage(gameObjectName, "OnNoCallBack", "1");
             }
         });
 
         return dialog;
     }
 
-    public static void ShowDialogConfirm(String title, String message, String yes, String no) {
+    public static void ShowDialogConfirm(String gameObjectName, String title, String message, String yes, String no) {
         DismissCurrentAlert();
 
-        alertDialog = CreateDialogConfirm(title, message, yes, no);
+        alertDialog = CreateDialogConfirm(gameObjectName, title, message, yes, no);
 
         alertDialog.show();
     }
 
     // Method overload for supporting non cancelable dialog
-    public static void ShowDialogConfirm(String title, String message, String yes, String no, boolean cancelable) {
+    public static void ShowDialogConfirm(String gameObjectName, String title, String message, String yes, String no, boolean cancelable) {
         DismissCurrentAlert();
 
-        alertDialog = CreateDialogConfirm(title, message, yes, no);
+        alertDialog = CreateDialogConfirm(gameObjectName, title, message, yes, no);
         alertDialog.setCancelable((cancelable));
 
         alertDialog.show();
     }
 
-    public static void ShowDialogInfo(String title, String message, String ok) {
+    public static void ShowDialogInfo(String gameObjectName, String title, String message, String ok) {
         DismissCurrentAlert();
         alertDialog = new AlertDialog.Builder(UnityPlayer.currentActivity).create(); //Read Update
         alertDialog.setTitle(title);
@@ -89,7 +89,7 @@ public class Bridge {
 
         alertDialog.setButton(ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                UnityPlayer.UnitySendMessage("MobileDialogInfo", "OnOkCallBack", "0");
+                UnityPlayer.UnitySendMessage(gameObjectName, "OnOkCallBack", "0");
             }
         });
 
@@ -101,7 +101,7 @@ public class Bridge {
         if (alertDialog != null)
             alertDialog.hide();
     }
-    public static void ShowDatePicker(int year, int month, int day) {
+    public static void ShowDatePicker(String gameObjectName, int year, int month, int day) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(UnityPlayer.currentActivity,
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -109,20 +109,20 @@ public class Bridge {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                         String s = String.format("%d-%d-%d %d:%d:%d", year, monthOfYear+1, dayOfMonth,0,0,0);
-                        UnityPlayer.UnitySendMessage("MobileDateTimePicker", "PickerClosedEvent", s);
+                        UnityPlayer.UnitySendMessage(gameObjectName, "PickerClosedEvent", s);
                     }
                 },
                 year, month - 1, day);
         datePickerDialog.show();
     }
 
-    public static void ShowDatePicker(int year, int month, int day, int firstDayOfWeek, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, boolean calendarViewShown, boolean spinnerShown) {
+    public static void ShowDatePicker(String gameObjectName, int year, int month, int day, int firstDayOfWeek, int minYear, int minMonth, int minDay, int maxYear, int maxMonth, int maxDay, boolean calendarViewShown, boolean spinnerShown) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(UnityPlayer.currentActivity,
             new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     String s = String.format("%d-%d-%d %d:%d:%d", year, monthOfYear+1, dayOfMonth,0,0,0);
-                    UnityPlayer.UnitySendMessage("MobileDateTimePicker", "PickerClosedEvent", s);
+                    UnityPlayer.UnitySendMessage(gameObjectName, "PickerClosedEvent", s);
                 }
             },
             year, month - 1, day);
@@ -133,7 +133,7 @@ public class Bridge {
                 @Override
                 public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     String s = String.format("%d-%d-%d %d:%d:%d", year, monthOfYear+1, dayOfMonth,0,0,0);
-                    UnityPlayer.UnitySendMessage("MobileDateTimePicker", "DateChangedEvent", s);
+                    UnityPlayer.UnitySendMessage(gameObjectName, "DateChangedEvent", s);
                 }
             });
         }
@@ -161,7 +161,7 @@ public class Bridge {
         datePickerDialog.show();
     }
 
-    public static void ShowTimePicker(int hour, int minute) {
+    public static void ShowTimePicker(String gameObjectName, int hour, int minute) {
         final Calendar c = Calendar.getInstance();
 
         // Create a new instance of TimePickerDialog and return it
@@ -174,7 +174,7 @@ public class Bridge {
                         int month = c.get(Calendar.MONTH);
                         // Calendar c = Calendar.getInstance();
                         String s = String.format("%d-%d-%d %d:%d:%d",yeah,month +1,day, hourOfDay, minute, 0);
-                        UnityPlayer.UnitySendMessage("MobileDateTimePicker", "PickerClosedEvent", s);
+                        UnityPlayer.UnitySendMessage(gameObjectName, "PickerClosedEvent", s);
                     }
                 }, hour, minute, true);
         timePickerDialog.show();

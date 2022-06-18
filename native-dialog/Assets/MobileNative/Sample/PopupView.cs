@@ -67,7 +67,9 @@ public class PopupView : MonoBehaviour
     }
     public void OnTimePicker()
     {
+        var now = DateTimeOffset.Now;
         NativeDialog.OpenTimePicker(
+            now.Hour, now.Minute,
             _date =>
             {
                 DebugLog(_date.ToString());
