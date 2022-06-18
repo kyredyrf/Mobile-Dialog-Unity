@@ -11,25 +11,25 @@ namespace pingak9
 
 #if UNITY_IPHONE
         [DllImport("__Internal")]
-        private static extern void _TAG_ShowDialogNeutral(string title, string message, string accept, string neutral, string decline);
+        private static extern void _TAG_ShowDialogNeutral(string gameObjectName, string title, string message, string accept, string neutral, string decline);
 
         [DllImport("__Internal")]
-        private static extern void _TAG_ShowDialogConfirm(string title, string message, string yes, string no);
+        private static extern void _TAG_ShowDialogConfirm(string gameObjectName, string title, string message, string yes, string no);
 
         [DllImport("__Internal")]
-        private static extern void _TAG_ShowDialogInfo(string title, string message, string ok);
+        private static extern void _TAG_ShowDialogInfo(string gameObjectName, string title, string message, string ok);
 
         [DllImport("__Internal")]
         private static extern void _TAG_DismissCurrentAlert();
 	
         [DllImport ("__Internal")]
-        private static extern void _TAG_ShowTimePicker(double unix);
+        private static extern void _TAG_ShowTimePicker(string gameObjectName, double unix);
 	
         [DllImport ("__Internal")]
-        private static extern void _TAG_ShowDatePicker(double unix);
+        private static extern void _TAG_ShowDatePicker(string gameObjectName, double unix);
 	
         [DllImport ("__Internal")]
-        private static extern void _TAG_ShowDatePickerWithRange(double firstUnixTime, double minimumUnixTime, double maximumUnixTime);
+        private static extern void _TAG_ShowDatePickerWithRange(string gameObjectName, double firstUnixTime, double minimumUnixTime, double maximumUnixTime);
 
 #endif
 
@@ -37,7 +37,7 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            _TAG_ShowDialogNeutral(title, message, accept, neutral, decline);
+            _TAG_ShowDialogNeutral(gameObjectName, title, message, accept, neutral, decline);
 #elif UNITY_ANDROID            
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowDialogNeutral", gameObjectName, title, message, accept, neutral, decline);
@@ -56,7 +56,7 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            _TAG_ShowDialogConfirm(title, message, yes, no);
+            _TAG_ShowDialogConfirm(gameObjectName, title, message, yes, no);
 #elif UNITY_ANDROID            
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowDialogConfirm", gameObjectName, title, message, yes, no, cancelable);
@@ -67,7 +67,7 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            _TAG_ShowDialogInfo(title, message, ok);
+            _TAG_ShowDialogInfo(gameObjectName, title, message, ok);
 #elif UNITY_ANDROID            
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowDialogInfo", gameObjectName, title, message, ok);
@@ -89,9 +89,9 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            DateTimeOffset dateTime = new DateTimeOffset(year, month, day);
-            double unix = (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds; 
-            _TAG_ShowDatePicker(unix);
+            DateTimeOffset dateTime = new DateTimeOffset(new DateTime(year, month, day));
+            double unix = (dateTime.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds; 
+            _TAG_ShowDatePicker(gameObjectName, unix);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowDatePicker", gameObjectName, year, month, day);
@@ -102,14 +102,14 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            var firstDateTime = new DateTimeOffset(year, month, day);
-            var minDateTime = new DateTimeOffset(minYear, minMonth, minDay);
-            var maxDateTime = new DateTimeOffset(maxYear, maxMonth, maxDay);
-            var baseTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            var firstUnixTime = (TimeZoneInfo.ConvertTimeToUtc(firstDateTime) - baseTime).TotalSeconds; 
-            var minUnixTime = (TimeZoneInfo.ConvertTimeToUtc(minDateTime) - baseTime).TotalSeconds; 
-            var maxUnixTime = (TimeZoneInfo.ConvertTimeToUtc(maxDateTime) - baseTime).TotalSeconds; 
-            _TAG_ShowDatePickerWithRange(firstUnixTime, minUnixTime, maxUnixTime);
+            var firstDateTime = new DateTimeOffset(new DateTime(year, month, day));
+            var minDateTime = new DateTimeOffset(new DateTime(minYear, minMonth, minDay));
+            var maxDateTime = new DateTimeOffset(new DateTime(maxYear, maxMonth, maxDay));
+            var baseTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            var firstUnixTime = (firstDateTime.ToUniversalTime() - baseTime).TotalSeconds; 
+            var minUnixTime = (minDateTime.ToUniversalTime() - baseTime).TotalSeconds; 
+            var maxUnixTime = (maxDateTime.ToUniversalTime() - baseTime).TotalSeconds; 
+            _TAG_ShowDatePickerWithRange(gameObjectName, firstUnixTime, minUnixTime, maxUnixTime);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowDatePicker", gameObjectName, year, month, day, firstDayOfWeek, minYear, minMonth, minDay, maxYear, maxMonth, maxDay, calendarViewShown, spinnerShown);
@@ -120,7 +120,7 @@ namespace pingak9
         {
 #if UNITY_EDITOR
 #elif UNITY_IPHONE
-            _TAG_ShowTimePicker(0);
+            _TAG_ShowTimePicker(gameObjectName, 0);
 #elif UNITY_ANDROID
             AndroidJavaClass javaUnityClass = new AndroidJavaClass("com.pingak9.nativepopup.Bridge");
             javaUnityClass.CallStatic("ShowTimePicker", gameObjectName, hour, minute);

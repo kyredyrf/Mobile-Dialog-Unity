@@ -2,6 +2,8 @@
 
 #import "IOSNativeDatePicker.h"
 
+static NSString *_gameObjectName = nil;
+
 @implementation IOSNativeDatePicker
 
 + (CGFloat) GetW {
@@ -44,8 +46,9 @@
     NSString *dateString = [dateFormatter stringFromDate:sender.date];
     
     NSLog(@"DateChangedEvent: %@", dateString);
-    
-    UnitySendMessage("MobileDateTimePicker", "DateChangedEvent", [DataConvertor NSStringToChar:dateString]);
+
+    char *gameObjectName = (char *) [_gameObjectName UTF8String];
+    UnitySendMessage(gameObjectName, "DateChangedEvent", [DataConvertor NSStringToChar:dateString]);
 }
 
 +(void) DP_PickerClosed:(UIDatePicker *)sender {
@@ -56,7 +59,8 @@
     
     NSLog(@"DateChangedEvent: %@", dateString);
     
-    UnitySendMessage("MobileDateTimePicker", "PickerClosedEvent", [DataConvertor NSStringToChar:dateString]);
+    char *gameObjectName = (char *) [_gameObjectName UTF8String];
+    UnitySendMessage(gameObjectName, "PickerClosedEvent", [DataConvertor NSStringToChar:dateString]);
     
 }
 
@@ -123,21 +127,20 @@ UIDatePicker *datePicker;
             
         case 2:
             datePicker.datePickerMode = UIDatePickerModeDate;
-            if (@available(iOS 13.4, *)) {
-                datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
-            }
-            if (minimumUnixTime != 0.0) {
-                datePicker.minimumDate = [NSDate dateWithTimeIntervalSince1970 :minimumUnixTime];
-            }
-            if (maximumUnixTime != 0.0) {
-                datePicker.maximumDate = [NSDate dateWithTimeIntervalSince1970 :maximumUnixTime];
-            }
-            NSDate *dateTraded = [NSDate dateWithTimeIntervalSince1970 :firstUnixTime];
-            [datePicker setDate:dateTraded];
             break;
-            
     }
     
+    if (@available(iOS 13.4, *)) {
+        datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+    }
+    if (minimumUnixTime != 0.0) {
+        datePicker.minimumDate = [NSDate dateWithTimeIntervalSince1970 :minimumUnixTime];
+    }
+    if (maximumUnixTime != 0.0) {
+        datePicker.maximumDate = [NSDate dateWithTimeIntervalSince1970 :maximumUnixTime];
+    }
+    NSDate *dateTraded = [NSDate dateWithTimeIntervalSince1970 :firstUnixTime];
+    [datePicker setDate:dateTraded];
     
     // NSLog(@"dtp mode: %ld", (long)datePicker.datePickerMode);
     
@@ -200,15 +203,18 @@ extern "C" {
     //  Unity Call Date Time Picker
     //--------------------------------------
     
-    void _TAG_ShowTimePicker(double unix) {
+    void _TAG_ShowTimePicker(char* gameObjectName, double unix) {
+        _gameObjectName = [DataConvertor charToNSString:gameObjectName];
         [IOSNativeDatePicker DP_showTimePicker:unix];
     }
     
-    void _TAG_ShowDatePicker(double unix) {
+    void _TAG_ShowDatePicker(char* gameObjectName, double unix) {
+        _gameObjectName = [DataConvertor charToNSString:gameObjectName];
         [IOSNativeDatePicker DP_showDatePicker:unix minimumUnixTime:0 maximumUnixTime:0];
     }
 
-    void _TAG_ShowDatePickerWithRange(double firstUnixTime, double minimumUnixTime, double maximumUnixTime) {
+    void _TAG_ShowDatePickerWithRange(char* gameObjectName, double firstUnixTime, double minimumUnixTime, double maximumUnixTime) {
+        _gameObjectName = [DataConvertor charToNSString:gameObjectName];
         [IOSNativeDatePicker DP_showDatePicker:firstUnixTime minimumUnixTime:minimumUnixTime maximumUnixTime:maximumUnixTime];
     }
 }

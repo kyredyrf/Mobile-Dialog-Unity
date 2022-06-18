@@ -5,6 +5,7 @@
 @implementation IOSNativePopUpsManager
 
 static UIAlertController* _currentAllert =  nil;
+static NSString *_gameObjectName = nil;
 
 + (void) unregisterAllertView {
     if(_currentAllert != nil) {
@@ -25,17 +26,20 @@ static UIAlertController* _currentAllert =  nil;
     
     UIAlertAction *rateAction = [UIAlertAction actionWithTitle:b1 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [IOSNativePopUpsManager unregisterAllertView];
-        UnitySendMessage("MobileDialogNeutral", "OnAcceptCallBack",  [DataConvertor NSIntToChar:0]);
+        char *gameObjectName = (char *) [_gameObjectName UTF8String];
+        UnitySendMessage(gameObjectName, "OnAcceptCallBack",  [DataConvertor NSIntToChar:0]);
     }];
     
     UIAlertAction *laterAction = [UIAlertAction actionWithTitle:b2 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [IOSNativePopUpsManager unregisterAllertView];
-        UnitySendMessage("MobileDialogNeutral", "OnNeutralCallBack",  [DataConvertor NSIntToChar:1]);
+        char *gameObjectName = (char *) [_gameObjectName UTF8String];
+        UnitySendMessage(gameObjectName, "OnNeutralCallBack",  [DataConvertor NSIntToChar:1]);
     }];
 
     UIAlertAction *declineAction = [UIAlertAction actionWithTitle:b3 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [IOSNativePopUpsManager unregisterAllertView];
-        UnitySendMessage("MobileDialogNeutral", "OnDeclineCallBack",  [DataConvertor NSIntToChar:2]);
+        char *gameObjectName = (char *) [_gameObjectName UTF8String];
+        UnitySendMessage(gameObjectName, "OnDeclineCallBack",  [DataConvertor NSIntToChar:2]);
     }];
 
     [alertController addAction:rateAction];
@@ -52,12 +56,14 @@ static UIAlertController* _currentAllert =  nil;
     
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:b1 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [IOSNativePopUpsManager unregisterAllertView];
-        UnitySendMessage("MobileDialogConfirm", "OnYesCallBack",  [DataConvertor NSIntToChar:0]);
+        char *gameObjectName = (char *) [_gameObjectName UTF8String];
+        UnitySendMessage(gameObjectName, "OnYesCallBack",  [DataConvertor NSIntToChar:0]);
     }];
     
     UIAlertAction *noAction = [UIAlertAction actionWithTitle:b2 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [IOSNativePopUpsManager unregisterAllertView];
-        UnitySendMessage("MobileDialogConfirm", "OnNoCallBack",  [DataConvertor NSIntToChar:1]);
+        char *gameObjectName = (char *) [_gameObjectName UTF8String];
+        UnitySendMessage(gameObjectName, "OnNoCallBack",  [DataConvertor NSIntToChar:1]);
     }];
     
     [alertController addAction:yesAction];
@@ -74,7 +80,8 @@ static UIAlertController* _currentAllert =  nil;
     
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:b1 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [IOSNativePopUpsManager unregisterAllertView];
-        UnitySendMessage("MobileDialogInfo", "OnOkCallBack",  [DataConvertor NSIntToChar:0]);
+        char *gameObjectName = (char *) [_gameObjectName UTF8String];
+        UnitySendMessage(gameObjectName, "OnOkCallBack",  [DataConvertor NSIntToChar:0]);
     }];
     [alertController addAction:okAction];
     
@@ -86,15 +93,18 @@ static UIAlertController* _currentAllert =  nil;
 extern "C" {
     // Unity Call
     
-    void _TAG_ShowDialogNeutral(char* title, char* message, char* accept, char* neutral, char* decline) {
+    void _TAG_ShowDialogNeutral(char* gameObjectName, char* title, char* message, char* accept, char* neutral, char* decline) {
+        _gameObjectName = [DataConvertor charToNSString:gameObjectName];
         [IOSNativePopUpsManager ShowDialogNeutral:[DataConvertor charToNSString:title] message:[DataConvertor charToNSString:message] acceptTitle:[DataConvertor charToNSString:accept] neutralTitle:[DataConvertor charToNSString:neutral] declineTitle:[DataConvertor charToNSString:decline]];
     }
     
-    void _TAG_ShowDialogConfirm(char* title, char* message, char* yes, char* no) {
+    void _TAG_ShowDialogConfirm(char* gameObjectName, char* title, char* message, char* yes, char* no) {
+        _gameObjectName = [DataConvertor charToNSString:gameObjectName];
         [IOSNativePopUpsManager ShowDialogConfirm:[DataConvertor charToNSString:title] message:[DataConvertor charToNSString:message] yesTitle:[DataConvertor charToNSString:yes] noTitle:[DataConvertor charToNSString:no]];
     }
     
-    void _TAG_ShowDialogInfo(char* title, char* message, char* ok) {
+    void _TAG_ShowDialogInfo(char* gameObjectName, char* title, char* message, char* ok) {
+        _gameObjectName = [DataConvertor charToNSString:gameObjectName];
         [IOSNativePopUpsManager ShowDialogInfo:[DataConvertor charToNSString:title] message:[DataConvertor charToNSString:message] okTitle:[DataConvertor charToNSString:ok]];
     }
     
